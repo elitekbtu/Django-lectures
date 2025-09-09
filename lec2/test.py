@@ -1,83 +1,133 @@
-from typing import Union
-from typing import Optional
-from typing import Any
-from typing import (Sequence, 
-                    Set,
-                    Tuple, 
-                    List, 
-                    Iterable,
-                    Callable,
-                    TypedDict,
-                    )
+# Python modules
+from typing import (
+    Union,
+    Optional,
+    Any,
+    List,
+    Tuple,
+    Dict,
+    Set,
+    Sequence,
+    Iterable,
+    Mapping,
+    Callable,
+    TypeVar,
+    TypedDict,
+    NamedTuple,
+    Literal,
+    NoReturn,
+)
 
 
-users_cnt_or_some_str: Union[int, str] = 1000   #Number of users
-#Python 3.10+ 
-users_cnt_or_some_str: int | str = 1000  
-
-some_string_or_none: str | None = None  #Not valid
-
-some_string_or_none: Optional[str] = None  #Valid
-
-any_variable: Any = None
-
-marks_list: list[int] = [1, 2, 3, 4, 5,]  # Valid
-marks_tuple: tuple[int] = (1, 2, 3, 4, 5,)  #Invalid
-marks_tuple: tuple[int, int, int, int, int] = (1, 2, 3, 4, 5,)  #Valid
-marks_tuple: tuple[int, ...] = (1, 2, 3, 4, 5,)  #Valid
-name_age_dict: dict[str, int] = {
-    "Temirbolat": 16, 
-    "john": 15,
+name_or_age: Union[str, int] = 12
+phone_number: Optional[str] = None
+thing: Any = "something"
+list_of_numbers = List[int] = [1, 2, 3, 4, 5]
+tuple_of_number = Tuple[int, ...] = (1, 2, 3, 4, 5)
+dict_of_users: Dict[str, int] = {
+    "Turarbek": 19,
+    "Beka": 19,
+    "Aza": 100,
 }
-unique_names_set: set[str] = {1, 2, 3}
+set_of_numbers: Set[int] = {1, 2, 3}
 
-def greet(names: Sequence[str]) -> None:
-    for name in names:
-        print(f"Hello {name}!")
-def greet(names) -> None:
+def greet(numbers:Sequence[int]) -> None:
     """
-    print a names
-    
-    :param names: A sequense of the names 
+    Function for greeting a list of numbers
+
+    :params: Sequence[int]
     :return: None
     """
-    name: str
-    for name in names:
-        print(f"Hello {name}!")
 
-def greet(names):
-    """
-    print a names
-    
-    :param names: A sequense of the names 
-    :return: None
-    """
-    name: str
-    for name in names:
-        print(f"Hello {name}!")
-    return None
+    for number in numbers:
+        print(f"{number}\n")
 
-a: Iterable[str] = iter(["Temirbolat", "Turarbek"])
-next(a)
-next(a)
-#next(a) it would raise StopIterable
 
-class A:
+list_of_nums: Iterable[int] = [1, 2, 3]
+next(list_of_numbers)
+next(list_of_numbers)
+
+users_info: Mapping[str, str] = {"name": "Turarbek", "surname": "Satbaldiyev"}
+
+greet_func:Callable[[Sequence[int]], None] = greet
+greet_func()
+
+T = TypeVar("T")
+
+def return_values(values:list[T]) -> list[T]:
     """
-    Example of class A
+    Function for returns values of the list
+
+    :params: list[T]
+    :return: list[T]
     """
 
-    def __getattribute__(self, name: str):
-        return name
+    return values
 
-greet_func: Callable[[Sequence[str]], None] = greet
+
+my_list = return_values([1, 2, 3, 4, 5])
+my_list_2 = return_values(["Hello", "World"])
+my_list_3 = return_values([True, False, True])
 
 class MovieDict(TypedDict):
+    """
+    Function representing a movie with name and genre
+    """
+
     name: str
-    year: int
+    """
+    Name of the movie
+    """
 
-movies: list[MovieDict] = {
-    
-}
+    genre: str
+    """
+    Genre of the movie
+    """
 
+
+movies: Tuple[MovieDict] = (
+    {"name": "Avatar", "genre": "fantastic"}, 
+    {"name": "Tom and Jerry", "genre": "cartoon"},
+)
+
+class SearchMovieResult(NamedTuple):
+    cur_movie:Optional[MovieDict]
+    """
+    Current movie
+    """
+    is_found:bool
+    """
+    A boolean indicates if movie was found
+    """
+
+
+def find_movie_by_name(movies: list[MovieDict], name: str) -> SearchMovieResult:
+    """
+    Find a movie by its name in a list of movies.
+
+    :param movies: A list of MovieDict objects.
+    :param name: The name of the movie to find.
+    :return: The MovieDict object if found, otherwise None.
+
+    """
+
+    movie: MovieDict
+    for movie in movies:
+        if movie["name"] == name:
+            return SearchMovieResult(
+                cur_movie=movie,
+                is_found=True
+            )
+    return SearchMovieResult(None, False)
+
+one: Literal[1]
+
+
+def fatal_error(msg: str) -> NoReturn:
+    """
+    Fatal error exception
+    :params: msg
+    :return: NoReturn
+    """
+    raise RuntimeError(f"Fatal error: {msg}")
 
